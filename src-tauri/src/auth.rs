@@ -130,8 +130,19 @@ async fn process_webview_url(state: &State<'_, AppState>, url: &str) -> Result<L
 }
 
 #[tauri::command]
+pub async fn check_login(state: State<'_, AppState>, app: AppHandle) -> Result<bool, String> {
+    let has_token = state.access_token.lock().unwrap().is_some();
+    if has_token {
+        if check_and_refresh_token(&state, &app).await.is_ok() {
+            return Ok(true);
+        }
+    }
+    Ok(false)
+}
+
+#[tauri::command]
 pub async fn start_webview_login(app: AppHandle, state: State<'_, AppState>) -> Result<LoginResult, String> {
-    let login_url = "https://auth.riotgames.com/authorize?redirect_uri=http%3A%2F%2Flocalhost%2Fredirect&client_id=riot-client&response_type=token%20id_token&scope=openid%20link%20ban&nonce=1";
+    let login_url = "https://auth.riotgames.com/authorize?client_id=play-valorant-web-prod&nonce=1&redirect_uri=https%3A%2F%2Fplayvalorant.com%2Fopt_in&response_type=token%20id_token&scope=account%20openid";
     
     let window = WebviewWindowBuilder::new(
         &app,
@@ -152,7 +163,7 @@ pub async fn start_webview_login(app: AppHandle, state: State<'_, AppState>) -> 
         
         if let Ok(url) = window.url() {
             let current_url = url.to_string();
-            if current_url.starts_with("http://localhost/redirect") && current_url.contains("access_token=") {
+            if current_url.starts_with("https://playvalorant.com/opt_in") && current_url.contains("access_token=") {
                 success_url = Some(current_url);
                 break;
             }
@@ -209,7 +220,7 @@ pub async fn check_and_refresh_token(state: &State<'_, AppState>, app: &AppHandl
     let init_req = serde_json::json!({
         "client_id": "play-valorant-web-prod",
         "nonce": "1",
-        "redirect_uri": "https://playvalorant.com/opt_auth",
+        "redirect_uri": "https://playvalorant.com/opt_in",
         "response_type": "token id_token",
         "scope": "account openid"
     });

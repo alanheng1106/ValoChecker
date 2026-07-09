@@ -253,3 +253,17 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     }
   });
 });
+
+// --- Initialization ---
+async function init() {
+  try {
+    const isLoggedIn = await invoke('check_login');
+    if (isLoggedIn) {
+      loadDashboard();
+    }
+  } catch (e) {
+    console.log("Not logged in or session expired.");
+  }
+}
+
+init();
