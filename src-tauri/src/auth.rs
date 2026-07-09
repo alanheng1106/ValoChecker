@@ -131,7 +131,7 @@ async fn process_webview_url(state: &State<'_, AppState>, url: &str) -> Result<L
 
 #[tauri::command]
 pub async fn start_webview_login(app: AppHandle, state: State<'_, AppState>) -> Result<LoginResult, String> {
-    let login_url = "https://auth.riotgames.com/authorize?client_id=play-valorant-web-prod&nonce=1&redirect_uri=https%3A%2F%2Fplayvalorant.com%2Fopt_auth&response_type=token%20id_token&scope=account%20openid";
+    let login_url = "https://auth.riotgames.com/authorize?redirect_uri=http%3A%2F%2Flocalhost%2Fredirect&client_id=riot-client&response_type=token%20id_token&scope=openid%20link%20ban&nonce=1";
     
     let window = WebviewWindowBuilder::new(
         &app,
@@ -151,9 +151,9 @@ pub async fn start_webview_login(app: AppHandle, state: State<'_, AppState>) -> 
         tokio::time::sleep(std::time::Duration::from_millis(500)).await;
         
         if let Ok(url) = window.url() {
-            let url_str = url.as_str();
-            if url_str.starts_with("https://playvalorant.com/opt_auth") {
-                success_url = Some(url_str.to_string());
+            let current_url = url.to_string();
+            if current_url.starts_with("http://localhost/redirect") && current_url.contains("access_token=") {
+                success_url = Some(current_url);
                 break;
             }
         }
