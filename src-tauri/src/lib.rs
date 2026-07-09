@@ -15,8 +15,7 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
-            auth::login,
-            auth::submit_2fa,
+            auth::start_webview_login,
             auth::logout,
             api::get_storefront,
             api::get_match_history,

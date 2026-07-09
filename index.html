@@ -22,42 +22,17 @@
       <div id="login-container" class="view-container">
         <div class="card">
           <h1>Login to Riot</h1>
-          <form id="login-form">
-            <div class="form-group">
-              <label for="username">Username</label>
-              <input type="text" id="username" required />
-            </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" id="password" required />
-            </div>
-            <div class="form-group">
-              <label for="region">Region</label>
-              <select id="region">
-                <option value="ap">Asia Pacific (AP)</option>
-                <option value="na">North America (NA)</option>
-                <option value="eu">Europe (EU)</option>
-                <option value="kr">Korea (KR)</option>
-              </select>
-            </div>
-            <button type="submit" class="riot-btn">Login</button>
-          </form>
-        </div>
-      </div>
-
-      <!-- MFA View -->
-      <div id="mfa-container" class="view-container hidden">
-        <div class="card">
-          <h1>2-Factor Authentication</h1>
-          <p>Please enter the code sent to your email.</p>
-          <form id="mfa-form">
-            <div class="form-group">
-              <label for="mfa-code">Verification Code</label>
-              <input type="text" id="mfa-code" required />
-            </div>
-            <button type="submit" class="riot-btn">Verify</button>
-            <button type="button" class="link-btn mt-2" id="cancel-mfa">Cancel</button>
-          </form>
+          <p>You will be redirected to the official Riot Games secure login page.</p>
+          <div class="form-group mt-2">
+            <label for="region">Game Region</label>
+            <select id="region">
+              <option value="ap">Asia Pacific (AP)</option>
+              <option value="na">North America (NA)</option>
+              <option value="eu">Europe (EU)</option>
+              <option value="kr">Korea (KR)</option>
+            </select>
+          </div>
+          <button id="webview-login-btn" class="riot-btn mt-2">Login with Riot</button>
         </div>
       </div>
 

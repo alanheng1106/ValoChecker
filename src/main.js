@@ -3,7 +3,6 @@ const { invoke } = window.__TAURI__.core;
 // --- State Machine ---
 const STATES = {
   LOGIN: 'LOGIN',
-  MFA: 'MFA',
   DASHBOARD: 'DASHBOARD'
 };
 
@@ -23,9 +22,13 @@ const errorToast = document.getElementById('error-toast');
 
 const containers = {
   [STATES.LOGIN]: document.getElementById('login-container'),
-  [STATES.MFA]: document.getElementById('mfa-container'),
   [STATES.DASHBOARD]: document.getElementById('dashboard-container')
 };
+
+const loginContainer = document.getElementById('login-container');
+const webviewLoginBtn = document.getElementById('webview-login-btn');
+const regionSelect = document.getElementById('region');
+const dashboardContainer = document.getElementById('dashboard-container');
 
 // --- Utilities ---
 function switchState(newState) {
@@ -189,54 +192,34 @@ async function loadMatchHistory() {
 }
 
 // --- Event Listeners ---
-document.getElementById('login-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const username = document.getElementById('username').value;
-  const password = document.getElementById('password').value;
-  currentRegion = document.getElementById('region').value;
+document.getElementById('webview-login-btn').addEventListener('click', async () => {
+  const region = regionSelect.value;
   
-  showLoading('Authenticating...');
   try {
-    const res = await invoke('login', { username, password });
-    hideLoading();
+    webviewLoginBtn.disabled = true;
+    webviewLoginBtn.textContent = 'Opening Riot Login...';
     
-    if (res === 'Success') {
+    // In Tauri v2, if a command returns an Enum, it serializes to a JS object
+    // e.g. "Success" or { Error: "..." }
+    const result = await invoke('start_webview_login');
+    
+    if (result === 'Success') {
+      currentRegion = region;
       loadDashboard();
-    } else if (res === 'Require2FA') {
-      switchState(STATES.MFA);
-    } else if (res && res.Error) {
-      showError(res.Error);
+    } else if (result && result.Error) {
+      alert(`Login failed: ${result.Error}`);
+      webviewLoginBtn.disabled = false;
+      webviewLoginBtn.textContent = 'Login with Riot';
     } else {
-      showError(JSON.stringify(res));
+      alert(`Unexpected response: ${JSON.stringify(result)}`);
+      webviewLoginBtn.disabled = false;
+      webviewLoginBtn.textContent = 'Login with Riot';
     }
-  } catch (err) {
-    hideLoading();
-    showError(err);
+  } catch (error) {
+    alert(`Login error: ${error}`);
+    webviewLoginBtn.disabled = false;
+    webviewLoginBtn.textContent = 'Login with Riot';
   }
-});
-
-document.getElementById('mfa-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const code = document.getElementById('mfa-code').value;
-  
-  showLoading('Verifying 2FA...');
-  try {
-    const res = await invoke('submit_2fa', { code });
-    hideLoading();
-    
-    if (res === 'Success') {
-      loadDashboard();
-    } else if (res && res.Error) {
-      showError(res.Error);
-    }
-  } catch (err) {
-    hideLoading();
-    showError(err);
-  }
-});
-
-document.getElementById('cancel-mfa').addEventListener('click', () => {
-  switchState(STATES.LOGIN);
 });
 
 document.getElementById('logout-btn').addEventListener('click', async () => {
