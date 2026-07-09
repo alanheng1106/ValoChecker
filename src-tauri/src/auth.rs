@@ -163,7 +163,7 @@ pub async fn start_webview_login(app: AppHandle, state: State<'_, AppState>) -> 
         
         if let Ok(url) = window.url() {
             let current_url = url.to_string();
-            if current_url.starts_with("https://playvalorant.com/opt_in") && current_url.contains("access_token=") {
+            if current_url.contains("playvalorant.com") && current_url.contains("access_token=") {
                 success_url = Some(current_url);
                 break;
             }
