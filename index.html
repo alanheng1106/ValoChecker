@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Valorant Store Viewer</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <!-- App Container -->
+    <div id="app">
+      <!-- Loading Overlay -->
+      <div id="loading-overlay" class="hidden">
+        <div class="spinner"></div>
+        <p id="loading-text">Loading...</p>
+      </div>
+
+      <!-- Error Toast -->
+      <div id="error-toast" class="hidden"></div>
+
+      <!-- Login View -->
+      <div id="login-container" class="view-container">
+        <div class="card">
+          <h1>Login to Riot</h1>
+          <form id="login-form">
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" id="username" required />
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" required />
+            </div>
+            <div class="form-group">
+              <label for="region">Region</label>
+              <select id="region">
+                <option value="ap">Asia Pacific (AP)</option>
+                <option value="na">North America (NA)</option>
+                <option value="eu">Europe (EU)</option>
+                <option value="kr">Korea (KR)</option>
+              </select>
+            </div>
+            <button type="submit" class="riot-btn">Login</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- MFA View -->
+      <div id="mfa-container" class="view-container hidden">
+        <div class="card">
+          <h1>2-Factor Authentication</h1>
+          <p>Please enter the code sent to your email.</p>
+          <form id="mfa-form">
+            <div class="form-group">
+              <label for="mfa-code">Verification Code</label>
+              <input type="text" id="mfa-code" required />
+            </div>
+            <button type="submit" class="riot-btn">Verify</button>
+            <button type="button" class="link-btn mt-2" id="cancel-mfa">Cancel</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Dashboard View -->
+      <div id="dashboard-container" class="view-container hidden">
+        <header class="dashboard-header">
+          <h2>Valorant Store Viewer</h2>
+          <button id="logout-btn" class="outline-btn">Logout</button>
+        </header>
+
+        <nav class="tabs">
+          <button class="tab-btn active" data-target="store-tab">Daily Store</button>
+          <button class="tab-btn" data-target="history-tab">Match History</button>
+        </nav>
+
+        <main class="tab-content">
+          <!-- Store Tab -->
+          <div id="store-tab" class="tab-pane active">
+            <div id="store-grid" class="store-grid">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- History Tab -->
+          <div id="history-tab" class="tab-pane hidden">
+            <div class="history-list-header">
+              <span>Agent</span>
+              <span>Map / Mode</span>
+              <span>K / D / A</span>
+              <span>Result</span>
+            </div>
+            <div id="history-list" class="history-list">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

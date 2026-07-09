@@ -1,0 +1,34 @@
+:root {
+  --color-bg-primary:    #0F1923;  /* Valorant 深色背景 */
+  --color-bg-secondary:  #1A2634;  /* 卡片背景 */
+  --color-bg-elevated:   #253444;  /* Hover 狀態 */
+  --color-accent:        #FF4655;  /* Valorant 紅，CTA 按鈕專用 */
+  --color-accent-hover:  #E03040;
+  --color-text-primary:  #ECE8E1;  /* 主要文字 */
+  --color-text-secondary:#9B9B9B;  /* 次要文字 */
+  --color-border:        #2A3A4A;
+
+  --font-display:  'Rajdhani', sans-serif;   /* 標題用 */
+  --font-body:     'Inter', sans-serif;
+
+  --radius-card:   4px;   /* 銳角，符合電競風格 */
+  --radius-btn:    2px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  user-select: none; /* Desktop app feel */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  margin-top: 0;
+}
