@@ -34,6 +34,7 @@ impl AppState {
         
         let client = reqwest::Client::builder()
             .cookie_provider(Arc::clone(&cookie_store))
+            .user_agent("RiotClient/60.0.0.4770705.4749685 rso-auth (Windows;10;;Professional, x64)")
             .build()
             .expect("Failed to build reqwest client");
             
@@ -200,6 +201,7 @@ pub async fn logout(state: State<'_, AppState>) -> Result<(), String> {
     let new_cookie_store = Arc::new(CookieStoreMutex::new(cookie_store));
     *state.client.lock().unwrap() = reqwest::Client::builder()
         .cookie_provider(Arc::clone(&new_cookie_store))
+        .user_agent("RiotClient/60.0.0.4770705.4749685 rso-auth (Windows;10;;Professional, x64)")
         .build()
         .map_err(|e| format!("Failed to reset client: {}", e))?;
     

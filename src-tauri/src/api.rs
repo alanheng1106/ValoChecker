@@ -74,7 +74,8 @@ pub async fn get_storefront(
         region, puuid
     );
     let resp = client
-        .get(&url)
+        .post(&url)
+        .json(&serde_json::json!({}))
         .header("Authorization", format!("Bearer {}", access_token))
         .header("X-Riot-Entitlements-JWT", ent_token)
         .header("X-Riot-ClientPlatform", CLIENT_PLATFORM)
