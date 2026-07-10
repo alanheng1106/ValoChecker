@@ -37,3 +37,12 @@ jobs:
           releaseBody: 'Automatic release of version ${{ github.ref_name }}'
           releaseDraft: true
           prerelease: false
+
+      - name: Upload Portable Executable
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # The tauri-action creates a release (draft by default)
+          # We can use the gh cli to upload the raw executable to the same release
+          cp src-tauri/target/release/valorant-store-viewer.exe Valorant-Store-Viewer-Portable.exe
+          gh release upload ${{ github.ref_name }} Valorant-Store-Viewer-Portable.exe --clobber
